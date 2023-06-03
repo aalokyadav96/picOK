@@ -40,11 +40,15 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func NewPhotoGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Println("path", r.URL.Path)
 	if r.Method == "GET" {
-		tmpl.ExecuteTemplate(w, "head.html", nil)
-		tmpl.ExecuteTemplate(w, "nav.html", nil)
-		tmpl.ExecuteTemplate(w, "upload.html", nil)
-		tmpl.ExecuteTemplate(w, "footer.html", nil)
+		if isLoggedIn(r) {
+			tmpl.ExecuteTemplate(w, "head.html", nil)
+			tmpl.ExecuteTemplate(w, "nav.html", nil)
+			tmpl.ExecuteTemplate(w, "upload.html", nil)
+			tmpl.ExecuteTemplate(w, "footer.html", nil)
+		} else {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)			
 		}
+	}
 }
 func NewPhotoPost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Println("path", r.URL.Path)
